@@ -1,0 +1,240 @@
+!pip install dnspython
+!pip install pymongo[srv]
+pip install qrcode
+
+import pymongo
+from pymongo import MongoClient
+
+client = pymongo.MongoClient("mongodb+srv://Aravinda:aravinda@cluster0.vuwca.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+
+db = client.booking
+records=db.ticketbooking
+movie=db.moviename
+theatre=db.theatrename
+movielist=[{'movie name':'Pushpa'},{'movie name':'Parugu'},{'movie name':'Julai'}]
+movie.insert_many(movielist)
+theatrelist=[{'theatre name':'Rama','CBFC':'U/A','timing':{'morning': 20,'evening': 20}},{'theatre name':'Ramana','CBFC':'U','timing':{'morning': 20,'evening': 20}},{'theatre name':'venkataramana','CBFC':'U/A','timing':{'morning': 20,'evening': 20}}]
+theatre.insert_many(theatrelist)
+  
+########main code########
+from pymongo import MongoClient
+import pandas as pd
+import random
+from PIL import Image
+import io
+import qrcode
+import matplotlib.pyplot as plt
+def ticket(name):
+  print("The movies available are:")
+  for x in movie.find({},{'_id':0,'movie name':1}):
+    data=([x])
+    s=pd.DataFrame(data)
+    print(s)
+  mov=input("Please enter which movie you want to see:")
+  for x in theatre.find({},{'_id':0,'theatre name':1,'CBFC':1,'timing':1}):
+    data=([x])
+    s=pd.DataFrame(data)
+    print(s)
+  option1=input("Please enter in which theatre you want to book ticket:")
+  if option1=="Rama":
+    s=input("please enter morning or evening show:")
+    if(s=='morning'):
+      seatnum=random.randint(1,20)
+      mqquery={'theatre name':'Rama'}
+      update={'$inc':{'timing.morning':-1}}
+      theatre.update_one(mqquery,update)
+      print("********************************Welcome to Guvi Cinimas******************************")
+      print("Hi "+name)
+      A={'Name':name}
+      image = records.find_one(A)
+      pil_img = Image.open(io.BytesIO(image['Profilepic']))
+      X=records.find(A,{'_id':0,'Profilepic':1})
+      plt.imshow(pil_img)
+      plt.show()
+      img = qrcode.make('Ticket Booking')
+      type(img)  # qrcode.image.pil.PilImage
+      img.save("ticketbooking_file.png")
+      print("****Below is your ticket related details****")
+      print("Name:" +name)  
+      print("Theatre name: "+option1)
+      print("Movie name: "+mov)
+      print("Seat number:",seatnum)
+      print("Show time: "+s)
+      i = Image.open("/content/ticketbooking_file.png")
+      plt.imshow(i)
+      plt.show()
+    elif(s=='evening'):
+      seatnum=random.randint(1,20)
+      mqquery={'theatre name':'Rama'}
+      update={'$inc':{'timing.evening':-1}} 
+      theatre.update_one(mqquery,update)
+      print("********************************Welcome to Guvi Cinimas******************************")
+      print("Hi "+name)
+      A={'Name':name}
+      image = records.find_one(A)
+      pil_img = Image.open(io.BytesIO(image['Profilepic']))
+      X=records.find(A,{'_id':0,'Profilepic':1})
+      plt.imshow(pil_img)
+      plt.show()
+      img = qrcode.make('Ticket Booking')
+      type(img)  # qrcode.image.pil.PilImage
+      img.save("ticketbooking_file.png")
+      print("****Below is your ticket related details****")  
+      print("Name:" +name)      
+      print("Theatre name: "+option1)
+      print("Movie name: "+mov)
+      #print(theatre name)
+      print("Seat number:",seatnum)
+      print("Show time: "+s)
+      i = Image.open("/content/ticketbooking_file.png")
+      plt.imshow(i)
+      plt.show()
+    else:
+      print("Please enter valid show")
+
+  elif option1=="Ramana":
+    s=input("please enter morning or evening show:")
+    if(s=='morning'):
+      seatnum=random.randint(1,20)
+      mqquery={'theatre name':'Ramana'}
+      update={'$inc':{'timing.morning':-1}}
+      theatre.update_one(mqquery,update)
+      print("********************************Welcome to Guvi Cinimas******************************")
+      print("Hi "+name)
+      A={'Name':name}
+      image = records.find_one(A)
+      pil_img = Image.open(io.BytesIO(image['Profilepic']))
+      X=records.find(A,{'_id':0,'Profilepic':1})
+      plt.imshow(pil_img)
+      plt.show()
+      img = qrcode.make('Ticket Booking')
+      type(img)  # qrcode.image.pil.PilImage
+      img.save("ticketbooking_file.png")
+      print("****Below is your ticket related details****")  
+      print("Name:" +name)      
+      print("Theatre name: "+option1)
+      print("Movie name: "+mov)
+      #print(theatre name)
+      print("Seat number:",seatnum)
+      print("Show time: "+s)
+      i = Image.open("/content/ticketbooking_file.png")
+      plt.imshow(i)
+      plt.show()
+    elif(s=='evening'):
+      seatnum=random.randint(1,20)
+      mqquery={'theatre name':'Ramana'}
+      update={'$inc':{'timing.evening':-1}} 
+      theatre.update_one(mqquery,update)
+      print("********************************Welcome to Guvi Cinimas******************************")
+      print("Hi "+name)
+      A={'Name':name}
+      image = records.find_one(A)
+      pil_img = Image.open(io.BytesIO(image['Profilepic']))
+      X=records.find(A,{'_id':0,'Profilepic':1})
+      plt.imshow(pil_img)
+      plt.show()
+      img = qrcode.make('Ticket Booking')
+      type(img)  # qrcode.image.pil.PilImage
+      img.save("ticketbooking_file.png")
+      print("****Below is your ticket related details****") 
+      print("Name:" +name)     
+      print("Theatre name: "+option1)
+      print("Movie name: "+mov)
+      #print(theatre name)
+      print("Seat number:",seatnum)
+      print("Show time: "+s)
+      i = Image.open("/content/ticketbooking_file.png")
+      plt.imshow(i)
+      plt.show()
+    else:
+      print("Please enter valid show")      
+  elif option1=="venkataramana":
+    s=input("please enter morning or evening show:")
+    if(s=='morning'):
+      seatnum=random.randint(1,20)
+      mqquery={'theatre name':'venkataramana'}
+      update={'$inc':{'timing.morning':-1}}
+      theatre.update_one(mqquery,update)
+      print("********************************Welcome to Guvi Cinimas******************************")
+      print("Hi "+name)
+      A={'Name':name}
+      image = records.find_one(A)
+      pil_img = Image.open(io.BytesIO(image['Profilepic']))
+      X=records.find(A,{'_id':0,'Profilepic':1})
+      plt.imshow(pil_img)
+      plt.show()
+      img = qrcode.make('Ticket Booking')
+      type(img)  # qrcode.image.pil.PilImage
+      img.save("ticketbooking_file.png")
+      #i = Image.open("/content/ticketbooking_file.png")   
+      print("****Below is your ticket related details****")
+      print("Name:" +name)  
+      print("Theatre name: "+option1)
+      print("Movie name: "+mov)
+      #print(theatre name)
+      print("Seat number:",seatnum)
+      print("Show time: "+s)
+      i = Image.open("/content/ticketbooking_file.png")
+      plt.imshow(i)
+      plt.show()
+    elif(s=='evening'):
+      seatnum=random.randint(1,20)
+      mqquery={'theatre name':'venkataramana'}
+      update={'$inc':{'timing.evening':-1}} 
+      theatre.update_one(mqquery,update)
+      print("********************************Welcome to Guvi Cinimas******************************")
+      print("Hi "+name)
+      A={'Name':name}
+      image = records.find_one(A)
+      pil_img = Image.open(io.BytesIO(image['Profilepic']))
+      X=records.find(A,{'_id':0,'Profilepic':1})
+      plt.imshow(pil_img)
+      plt.show()
+      img = qrcode.make('Ticket Booking')
+      type(img)  # qrcode.image.pil.PilImage
+      img.save("ticketbooking_file.png")      
+      print("****Below is your ticket related details****")
+      print("Name:" +name)  
+      print("Theatre name: "+option1)
+      print("Movie name: "+mov)
+      #print(theatre name)
+      print("Seat number:",seatnum)
+      print("Show time: "+s)
+      i = Image.open("/content/ticketbooking_file.png")
+      plt.imshow(i)
+      plt.show()
+    else:
+      print("Please enter valid show")   
+  else:
+    print("Please enter valid option")     
+################Register################
+
+def register():
+  n=input("Enter your name:")
+  p=input("Enter your phone number:")
+  m=input("Enter your mailid:")
+  pa=input("Enter your password of min 6 to max 16 characters:")
+  pic=input("Enter your profile pic url:")
+  im=Image.open(pic)
+  image_bytes = io.BytesIO()
+  im.save(image_bytes, format='JPEG')
+  data={'Name':n,'Phone':p,'Mail_id':m,'Password':pa,'Profilepic':image_bytes.getvalue()}
+  x=records.insert_one(data)  
+  print("Registered Successfully")
+def login():
+  mail=input("Enter your mailid:")
+  password=input("Enter your password:")
+  name=input("Enter your name:")
+  search={'Mail_id':mail,'Password':password,'Name':name}
+  mydoc=records.find(search)
+  for x in mydoc:
+    print("welcome to "+name)
+    ticket(name)
+option=input("Please enter Login or Register:")
+if option=="Login":
+  login()
+elif option=="Register":
+  register()
+else:
+    print("Please enter valid option")  
+   
